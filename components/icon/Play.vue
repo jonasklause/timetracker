@@ -1,6 +1,5 @@
 <template>
-  <g fill="red">
-    <path d="m 10 0 h 30 v 100 h -30 z" fill="red" />
-    <path d="m 60 0 h 30 v 100 h -30 z" fill="red" />
+  <g fill="currentColor">
+    <path d="m 0 0 l 100 50 l -100 50 z " />
   </g>
 </template>

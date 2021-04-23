@@ -1,32 +1,7 @@
 import Vue from 'vue'
 
 export const state = () => ({
-  items: [
-    {
-      id: 1,
-      label: 'Testtimer nur gucken',
-      resumed_at: 1617768855435,
-      paused_with: 2000,
-    },
-    {
-      id: 2,
-      label: 'Guckguck',
-      resumed_at: 0,
-      paused_with: 560000,
-    },
-    {
-      id: 4,
-      label: 'Läuft schon länger',
-      resumed_at: 0,
-      paused_with: 3800000,
-    },
-    {
-      id: 5,
-      label: 'sfs',
-      resumed_at: 0,
-      paused_with: 765000,
-    },
-  ],
+  items: [],
 })
 
 export const getters = {
@@ -40,7 +15,6 @@ export const getters = {
 
 export const mutations = {
   init(state, { items }) {
-    console.log(items)
     state.items = items
   },
   add(state) {
@@ -50,7 +24,7 @@ export const mutations = {
       id: newId,
       label: '',
       resumed_at: Date.now(),
-      paused_with: 0,
+      paused_with: parseInt(state.settings.startAt || 0) * 1000,
     })
   },
   remove(state, id) {

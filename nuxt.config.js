@@ -12,6 +12,14 @@ export default {
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       { hid: 'description', name: 'description', content: '' },
     ],
+    link: [
+      {
+        hid: 'icon',
+        rel: 'icon',
+        type: 'image/svg',
+        href: '/favicon.svg',
+      },
+    ],
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css

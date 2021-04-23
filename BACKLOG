@@ -1,0 +1,21 @@
+BACKLOG
+
+[ ] Timetransfer: Commit/Submit
+
+
+NEXT
+[ ] Timetransfer: Layout / UX (Modal?)
+
+
+
+DONE
+[x] Settings Page
+    - Exclusive Start
+    - Start at 0
+[x] Favicon - SVG
+[x] Play / Pause Icon - SVG
+[x] Time Sum / Footer or Header
+[x] Multisite Layout
+    - Headerbar ( Nav )
+    - Subpage (History)
+[x] Subpage: Session History (new State Store fpor Session)

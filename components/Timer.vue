@@ -5,23 +5,29 @@
   >
     <div class="id text-left text-gray-500 text-xs p-2">#{{ id }}</div>
     <ul class="text-right flex justify-end">
-      <li>
-        <button class="p-2" title="Delete" @click="remove">DE</button>
-      </li>
       <li class="relative">
         <NuxtLink
           to="/transfer"
           class="inline-block p-2"
           title="Transfer to another timer"
         >
-          TR
+          <IconBase width="20" height="20">
+            <IconTransfer />
+          </IconBase>
         </NuxtLink>
+      </li>
+      <li>
+        <button class="p-2 text-3xl" title="Delete" @click="remove">
+          <IconBase width="20" height="20">
+            <IconDelete />
+          </IconBase>
+        </button>
       </li>
     </ul>
     <div class="col-span-2">
       <input
         ref="label"
-        :value="label"
+        :value="tempLabel || label"
         class="p-1 text-center bg-transparent block w-full"
         @input="updateLabel($event.target.value)"
       />
@@ -29,16 +35,16 @@
     <div class="col-span-2 text-left">
       <button
         class="absolute p-4"
-        :class="{ 'text-red-500': isRunning }"
+        :title="isRunning ? 'Pause' : 'Resume'"
         @click="toggle"
       >
         <IconBase width="24" height="24">
-          <Component :is="isRunning ? 'IconRecording' : 'IconPause'" />
+          <Component :is="isRunning ? 'IconPause' : 'IconPlay'" />
         </IconBase>
       </button>
       <input
         class="p-2 text-4xl text-center bg-transparent block w-full font-mono"
-        :value="time(true)"
+        :value="time()"
         @focus="focus = 'TIME'"
         @blur="focus = null"
         @click="$event.target.select()"
@@ -54,6 +60,8 @@ import timeFormat from '../lib/timeFormat.js'
 import timeParse from '../lib/timeParse.js'
 
 export default {
+  timeUpdateInterval: null,
+  labelUpdateTimeout: null,
   props: {
     id: {
       type: Number,
@@ -74,7 +82,7 @@ export default {
   },
   data() {
     return {
-      interval: null,
+      tempLabel: '',
       focus: null,
     }
   },
@@ -96,66 +104,85 @@ export default {
     this.renderInterval(false)
   },
   methods: {
-    time(format) {
+    time(noFormat) {
       const time = timeSum(this.paused_with, this.resumed_at)
-      if (format) {
-        return timeFormat(time)
+      if (noFormat) {
+        return time
       }
-      return time
+      return timeFormat(time)
     },
     renderInterval(start) {
-      if (!start && this.interval) {
-        clearInterval(this.interval)
+      if (!start && this.$options.timeUpdateInterval) {
+        clearInterval(this.$options.timeUpdateInterval)
       } else if (start) {
-        this.interval = setInterval(() => {
+        this.$options.timeUpdateInterval = setInterval(() => {
           if (this.focus !== 'TIME') {
             this.$forceUpdate()
           }
         }, 1000)
       }
     },
-    resume() {
-      this.$store.dispatch('resume', { id: this.id, exclusive: true })
+    resume(event) {
+      const settings = this.$store.state.settings
+      this.$store.commit('history/addEntry', {
+        type: 'timer/item/resume',
+        text: `#${this.id} resumed with ${this.time()}`,
+      })
+      const exclusive = settings.pauseOthersOnResume && !event.metaKey
+      this.$store.dispatch('resume', { id: this.id, exclusive })
     },
     pause() {
+      this.$store.commit('history/addEntry', {
+        type: 'timer/item/pause',
+        text: `timer #${this.id} paused with ${this.time()}`,
+      })
       this.$store.commit('pause', this.id)
     },
-    toggle() {
-      this.isRunning ? this.pause() : this.resume()
+    toggle(event) {
+      this.isRunning ? this.pause(event) : this.resume(event)
     },
     remove() {
-      console.info(
-        `Removed Timer #${this.id} "${this.label}" (${this.formattedTime})`
-      )
+      this.$store.commit('history/addEntry', {
+        type: 'timer/item/removed',
+        text: `timer #${this.id} removed with ${this.time()}`,
+      })
       this.$store.commit('remove', this.id)
     },
     updateTime(value) {
       const newTime = timeParse(value)
+      const oldTime = this.time()
       if (newTime !== false) {
         this.$store.commit('updateTime', {
           id: this.id,
           time: newTime,
           absolute: true,
         })
+        this.$store.commit('history/addEntry', {
+          type: 'timer/item/updateTime',
+          text: `timer #${this.id} updated time ${oldTime} -> ${timeFormat(
+            newTime
+          )}`,
+        })
       }
     },
     updateLabel(value) {
-      this.$store.commit('update', {
-        id: this.id,
-        label: value,
-      })
+      const oldLabel = this.label
+      this.tempLabel = value
+      clearTimeout(this.$options.labelUpdateTimeout)
+      this.$options.labelUpdateTimeout = setTimeout(() => {
+        this.tempLabel = ''
+        if (oldLabel !== value) {
+          this.$store.commit('update', {
+            id: this.id,
+            label: value,
+          })
+          this.$store.commit('history/addEntry', {
+            type: 'timer/item/updateLabel',
+            text: `timer #${this.id} updated label "${oldLabel}" -> "${value}"`,
+          })
+        }
+      }, 1000)
     },
   },
 }
 </script>
-
-<style>
-.time.running::before {
-  content: '●';
-  position: absolute;
-  margin-left: 0.5rem;
-  line-height: 3.5rem;
-  font-size: 1rem;
-  color: red;
-}
-</style>
