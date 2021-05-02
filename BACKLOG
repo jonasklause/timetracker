@@ -1,14 +1,15 @@
 BACKLOG
 
-[ ] Timetransfer: Commit/Submit
 
 
 NEXT
-[ ] Timetransfer: Layout / UX (Modal?)
 
 
 
 DONE
+[x] Timetransfer: Commit/Submit
+[x] Verlauf leeren
+[x] Timetransfer: Layout / UX (Modal?)
 [x] Settings Page
     - Exclusive Start
     - Start at 0

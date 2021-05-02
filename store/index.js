@@ -6,7 +6,7 @@ export const state = () => ({
 
 export const getters = {
   isAnyRunning: (state) => {
-    return !!state.items.find((item) => item.resumed_at)
+    return !!state.items.find((item) => item.resumedAt)
   },
   byId: (state) => (id) => {
     return state.items.find((item) => item.id === id)
@@ -23,8 +23,8 @@ export const mutations = {
     state.items.unshift({
       id: newId,
       label: '',
-      resumed_at: Date.now(),
-      paused_with: parseInt(state.settings.startAt || 0) * 1000,
+      resumedAt: Date.now(),
+      pausedWith: parseInt(state.settings.startAt || 0),
     })
   },
   remove(state, id) {
@@ -42,13 +42,13 @@ export const mutations = {
     if (absolute) {
       Vue.set(state.items, index, {
         ...item,
-        paused_with: time,
-        resumed_at: item.resumed_at ? Date.now() : 0,
+        pausedWith: time,
+        resumedAt: item.resumedAt ? Date.now() : 0,
       })
     } else {
       Vue.set(state.items, index, {
         ...item,
-        paused_with: item.paused_with + time,
+        pausedWith: item.pausedWith + time,
       })
     }
   },
@@ -56,15 +56,15 @@ export const mutations = {
     const index = state.items.findIndex((item) => item.id === id)
     const item = state.items[index]
 
-    item.paused_with += Date.now() - item.resumed_at
-    item.resumed_at = 0
+    item.pausedWith += Date.now() - item.resumedAt
+    item.resumedAt = 0
   },
 }
 
 export const actions = {
   pauseAll({ state, commit }) {
     state.items
-      .filter((item) => item.resumed_at)
+      .filter((item) => item.resumedAt)
       .forEach((item) => {
         commit('pause', item.id)
       })
@@ -75,7 +75,7 @@ export const actions = {
     }
     context.commit('update', {
       id,
-      resumed_at: Date.now(),
+      resumedAt: Date.now(),
     })
   },
 }

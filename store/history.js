@@ -11,4 +11,7 @@ const addEntry = (state, { type, text }) => {
 
 export const mutations = {
   addEntry,
+  clear(state) {
+    state.entries = []
+  },
 }

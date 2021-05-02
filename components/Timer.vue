@@ -6,18 +6,14 @@
     <div class="id text-left text-gray-500 text-xs p-2">#{{ id }}</div>
     <ul class="text-right flex justify-end">
       <li class="relative">
-        <NuxtLink
-          to="/transfer"
-          class="inline-block p-2"
-          title="Transfer to another timer"
-        >
+        <button class="p-2" title="Zeit verschieben" @click="transfer">
           <IconBase width="20" height="20">
             <IconTransfer />
           </IconBase>
-        </NuxtLink>
+        </button>
       </li>
       <li>
-        <button class="p-2 text-3xl" title="Delete" @click="remove">
+        <button class="p-2" title="Löschen" @click="remove">
           <IconBase width="20" height="20">
             <IconDelete />
           </IconBase>
@@ -35,7 +31,7 @@
     <div class="col-span-2 text-left">
       <button
         class="absolute p-4"
-        :title="isRunning ? 'Pause' : 'Resume'"
+        :title="isRunning ? 'Pause' : 'Fortsetzen'"
         @click="toggle"
       >
         <IconBase width="24" height="24">
@@ -48,7 +44,7 @@
         @focus="focus = 'TIME'"
         @blur="focus = null"
         @click="$event.target.select()"
-        @change="updateTime($event.target.value)"
+        @change="updateTime"
       />
     </div>
   </div>
@@ -71,11 +67,11 @@ export default {
       type: String,
       default: '',
     },
-    resumed_at: {
+    resumedAt: {
       type: Number,
       default: 0,
     },
-    paused_with: {
+    pausedWith: {
       type: Number,
       default: 0,
     },
@@ -88,11 +84,11 @@ export default {
   },
   computed: {
     isRunning() {
-      return this.resumed_at > 0
+      return this.resumedAt > 0
     },
   },
   watch: {
-    resumed_at(running) {
+    resumedAt(running) {
       this.renderInterval(running)
     },
   },
@@ -105,7 +101,7 @@ export default {
   },
   methods: {
     time(noFormat) {
-      const time = timeSum(this.paused_with, this.resumed_at)
+      const time = timeSum(this.pausedWith, this.resumedAt)
       if (noFormat) {
         return time
       }
@@ -126,7 +122,7 @@ export default {
       const settings = this.$store.state.settings
       this.$store.commit('history/addEntry', {
         type: 'timer/item/resume',
-        text: `#${this.id} resumed with ${this.time()}`,
+        text: `resumed #${this.id} (${this.time()})`,
       })
       const exclusive = settings.pauseOthersOnResume && !event.metaKey
       this.$store.dispatch('resume', { id: this.id, exclusive })
@@ -134,7 +130,7 @@ export default {
     pause() {
       this.$store.commit('history/addEntry', {
         type: 'timer/item/pause',
-        text: `timer #${this.id} paused with ${this.time()}`,
+        text: `paused #${this.id} (${this.time()})`,
       })
       this.$store.commit('pause', this.id)
     },
@@ -144,12 +140,16 @@ export default {
     remove() {
       this.$store.commit('history/addEntry', {
         type: 'timer/item/removed',
-        text: `timer #${this.id} removed with ${this.time()}`,
+        text: `removed #${this.id} "${this.label}" (${this.time()})`,
       })
       this.$store.commit('remove', this.id)
     },
-    updateTime(value) {
-      const newTime = timeParse(value)
+    transfer() {
+      this.$store.commit('transfer/setSource', this.id)
+      this.$router.push({ path: '/transfer' })
+    },
+    updateTime(event) {
+      const newTime = timeParse(event.target.value)
       const oldTime = this.time()
       if (newTime !== false) {
         this.$store.commit('updateTime', {
@@ -159,10 +159,10 @@ export default {
         })
         this.$store.commit('history/addEntry', {
           type: 'timer/item/updateTime',
-          text: `timer #${this.id} updated time ${oldTime} -> ${timeFormat(
-            newTime
-          )}`,
+          text: `updated time #${this.id} ${oldTime} -> ${timeFormat(newTime)}`,
         })
+      } else {
+        this.$forceUpdate()
       }
     },
     updateLabel(value) {
@@ -178,7 +178,7 @@ export default {
           })
           this.$store.commit('history/addEntry', {
             type: 'timer/item/updateLabel',
-            text: `timer #${this.id} updated label "${oldLabel}" -> "${value}"`,
+            text: `updated label #${this.id} "${oldLabel}" -> "${value}"`,
           })
         }
       }, 1000)

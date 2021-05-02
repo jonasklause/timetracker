@@ -32,19 +32,13 @@ export default {
       nav: [
         {
           to: '/settings',
-          title: 'Settings',
+          title: 'Einstellungen',
           label: '',
           icon: 'IconSettings',
         },
         {
-          to: '/transfer',
-          title: 'Transfer time between items',
-          label: '',
-          icon: 'IconTransfer',
-        },
-        {
           to: '/history',
-          title: 'History',
+          title: 'Verlauf',
           label: '',
           icon: 'IconHistory',
         },

@@ -46,7 +46,7 @@ export default {
   methods: {
     sum() {
       const sum = this.items
-        .map((item) => timeSum(item.paused_with, item.resumed_at))
+        .map((item) => timeSum(item.pausedWith, item.resumedAt))
         .reduce((i, j) => i + j, 0)
       return timeFormat(sum)
     },

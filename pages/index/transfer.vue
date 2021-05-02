@@ -1,60 +1,56 @@
 <template>
-  <div class="absolute top-20 w-full">
+  <div
+    v-if="sourceId"
+    class="fixed top-0 left-0 w-full bg-gray-800 bg-opacity-60 h-screen flex items-center justify-center"
+    @click.self="$router.push({ path: '/' })"
+  >
     <div
-      class="w-96 mx-auto bg-gray-700 ring"
+      class="max-w-screen-sm w-full bg-gray-700 border-2 border-gray-600 max-h-screen overflow-auto"
       role="menu"
       aria-orientation="vertical"
       aria-labelledby="options-menu"
     >
-      <div class="text-right">
-        <NuxtLink to="/" class="inline-block px-2 hover:bg-gray-600"
-          >&times;</NuxtLink
-        >
+      <div class="float-right">
+        <NuxtLink to="/" class="inline-block p-2">
+          <IconBase width="20" height="20">
+            <IconDelete />
+          </IconBase>
+        </NuxtLink>
       </div>
+      <div class="p-2">
+        <h2 class="text-sm mb-1 text-gray-500">#{{ sourceId }}</h2>
+        <div class="text-lg">
+          {{ sourceLabel }}
+        </div>
+        <hr class="border-gray-600 my-3 border-1" />
+        <h2 class="text-xl mb-4">
+          Zeit verschieben
+          <span class="text-gray-400 text-sm">
+            <br />
+            Wieviel soll verschoben werden?
+          </span>
+        </h2>
+        <TransferTimeSelection />
 
-      <div class="item-selection text-left" role="none">
-        <a
-          href="#"
-          class="block px-4 py-1 text-sm hover:bg-gray-600"
-          role="menuitem"
-          >neuer Timer</a
-        >
-        <a
-          v-for="item in $store.state.items"
-          :key="item.id"
-          href="#"
-          class="block px-4 py-1 text-sm hover:bg-gray-600"
-          role="menuitem"
-          >#{{ item.id }} {{ item.label }}</a
-        >
-        <a
-          href="#"
-          class="block px-4 py-1 text-sm hover:bg-gray-600"
-          role="menuitem"
-          >entfernen</a
-        >
-      </div>
+        <hr class="my-4 birder-2 border-gray-600" />
 
-      <div class="timeSelection">
-        <div class="flex p-2">
+        <h2 class="text-xl mb-4">
+          Ziel auswählen
+          <span class="text-gray-400 text-sm">
+            <br />
+            Wohin soll verschoben werden?
+          </span>
+        </h2>
+        <TransferItemSelection />
+
+        <div class="text-right mt-6">
           <button
-            v-for="(timeSuggest, index) in timeSuggestions"
-            :key="index"
-            class="hover:bg-gray-600 p-1 flex-grow"
-            @click="time = timeSuggest"
+            class="bg-green-700 hover:bg-green-800 px-4 py-2 inline-block rounded"
+            :disabled="
+              !$store.state.transfer.targetId || !$store.state.transfer.time
+            "
+            @click="submit"
           >
-            {{ timeSuggest }}m
-          </button>
-        </div>
-        <div class="flex p-2">
-          <input v-model="time" class="flex-grow" type="range" />
-          <input
-            v-model="time"
-            class="bg-transparent border-2 border-gray-400 p-1 w-12 text-center ml-2"
-          />
-        </div>
-        <div class="text-right">
-          <button class="bg-green-700 hover:bg-green-800 p-1 block w-full">
             OK
           </button>
         </div>
@@ -65,7 +61,7 @@
 
 <script>
 // import timeSum from '../lib/timeSum.js'
-// import timeFormat from '../lib/timeFormat.js'
+import timeFormat from '../../lib/timeFormat.js'
 
 export default {
   props: {
@@ -80,6 +76,42 @@ export default {
       targetItem: null,
       timeSuggestions: [1, 5, 10, 20, 45],
     }
+  },
+  computed: {
+    sourceId() {
+      return this.$store.state.transfer.sourceId
+    },
+    sourceLabel() {
+      const timerItem = this.$store.getters.byId(this.sourceId) || {}
+      return timerItem.label || ''
+    },
+  },
+  created() {
+    if (!this.sourceId) {
+      this.$router.push('/')
+    }
+  },
+  methods: {
+    submit() {
+      const { targetId, sourceId, time } = this.$store.state.transfer
+      if (!targetId) return
+      this.$store.commit('updateTime', {
+        id: sourceId,
+        time: -time,
+      })
+      this.$store.commit('updateTime', {
+        id: targetId,
+        time: +time,
+      })
+
+      this.$store.commit('history/addEntry', {
+        type: 'timer/item/updateLabel',
+        text: `transferred ${timeFormat(
+          time
+        )} from #${sourceId} to #${targetId}`,
+      })
+      this.$router.push('/')
+    },
   },
 }
 </script>

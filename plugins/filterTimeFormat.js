@@ -1,4 +1,6 @@
-export default function timeFormat(time, format) {
+import Vue from 'vue'
+
+Vue.filter('timeFormat', function (time, format) {
   if (format) return altFormat(time)
 
   let { seconds, minutes, hours } = toHoursMinutesSecondes(time)
@@ -8,7 +10,7 @@ export default function timeFormat(time, format) {
   if (hours < 10) hours = '0' + hours
 
   return hours + ':' + minutes + ':' + seconds
-}
+})
 
 function toHoursMinutesSecondes(ms) {
   return {
@@ -24,5 +26,6 @@ function altFormat(time) {
   if (hours) out.push(hours + 'h')
   if (minutes) out.push(minutes + 'm')
   if (seconds) out.push(seconds + 's')
+
   return out.join(' ')
 }
