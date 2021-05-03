@@ -1,6 +1,8 @@
 import Vue from 'vue'
 
-export const state = () => ({})
+export const state = () => ({
+  pauseOthersOnResume: true,
+})
 
 export const mutations = {
   set(state, { key, value }) {
