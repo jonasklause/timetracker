@@ -56,8 +56,8 @@ export default {
           rel: 'icon',
           type: 'image/svg',
           href: this.$store.getters.isAnyRunning
-            ? '/running.svg'
-            : '/favicon.svg',
+            ? 'running.svg'
+            : 'favicon.svg',
         },
       ],
     }

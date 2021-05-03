@@ -20,7 +20,7 @@ export default {
         hid: 'icon',
         rel: 'icon',
         type: 'image/svg',
-        href: '/favicon.svg',
+        href: 'favicon.svg',
       },
     ],
   },
