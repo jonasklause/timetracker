@@ -22,6 +22,12 @@
     <div class="p-4">
       <Nuxt />
     </div>
+    <div class="p-4 text-sm text-gray-500 flex flex-col leading-8">
+      <NuxtLink to="/history">Änderungsverlauf</NuxtLink>
+      <a href="https://paypal.me/jontro" target="_blank">
+        Spendier' mir ein Bier
+      </a>
+    </div>
   </div>
 </template>
 
@@ -35,12 +41,6 @@ export default {
           title: 'Einstellungen',
           label: '',
           icon: 'IconSettings',
-        },
-        {
-          to: '/history',
-          title: 'Verlauf',
-          label: '',
-          icon: 'IconHistory',
         },
       ],
     }

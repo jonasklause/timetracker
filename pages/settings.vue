@@ -8,9 +8,11 @@
     >
       <div class="flex-grow">
         <div>{{ field.label }}</div>
-        <div v-if="field.description" class="text-gray-400 text-sm">
-          {{ field.description }}
-        </div>
+        <div
+          v-if="field.description"
+          class="text-gray-400 text-sm"
+          v-html="field.description"
+        ></div>
       </div>
 
       <Control
@@ -34,7 +36,7 @@ export default {
           type: 'Text',
           label: 'Start bei',
           description:
-            'Jeder neue Timer startet nicht mehr bei 0 sondern bei dem angegebenen Wert.',
+            'Jeder neue Timer startet nicht mehr bei 0s sondern bei dem angegebenen Wert. <i>Bsp.: 2m oder 30s</i>',
           config: {
             get: (value) => timeFormat(value, 1),
             set: (value) => timeParse(value),
@@ -44,7 +46,7 @@ export default {
           type: 'Checkbox',
           label: 'Andere Timer pausieren',
           description:
-            'Sobald ein neuer Timer gestartet oder fortgesetzt wird, werden alle anderen pausiert. Alternativ kann beim Starten eines Timers  Command (Mac) bzw. Strg (Windows) gedrückt werden, um mehrere Timer gleichzeitig laufen zu lassen.',
+            'Sobald ein neuer Timer gestartet oder fortgesetzt wird, werden alle anderen pausiert. Alternativ kann beim Starten eines Timers die Taste Command (Mac) bzw. Strg (Windows) gedrückt werden, um das Pausieren der anderen Timer zu verhindern.',
         },
       }
     },
