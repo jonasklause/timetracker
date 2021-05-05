@@ -48,6 +48,12 @@ export default {
           description:
             'Sobald ein neuer Timer gestartet oder fortgesetzt wird, werden alle anderen pausiert. Alternativ kann beim Starten eines Timers die Taste Command (Mac) bzw. Strg (Windows) gedrückt werden, um das Pausieren der anderen Timer zu verhindern.',
         },
+        showTransferButtons: {
+          type: 'Checkbox',
+          label: 'Zeiten verschieben',
+          description:
+            'Erfasste Zeiten können ganz oder teilweise in andere Timer verschoben werden.',
+        },
       }
     },
   },
