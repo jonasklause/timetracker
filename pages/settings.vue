@@ -21,6 +21,19 @@
         class="ml-6 w-16 text-right flex-shrink-0"
       />
     </label>
+    <hr class="border-gray-600 mb-4" />
+
+    <h2 class="text-3xl mb-6">Papierkorb</h2>
+    <button
+      class="bg-gray-600 rounded inline-block p-2"
+      @click="$store.commit('trash/clear')"
+    >
+      {{
+        $store.state.trash.items.length
+          ? `Papierkorb leeren (${$store.state.trash.items.length} Timer)`
+          : '✓ Papierkorb leer'
+      }}
+    </button>
   </div>
 </template>
 
@@ -30,6 +43,9 @@ import timeParse from '../lib/timeParse.js'
 
 export default {
   computed: {
+    isTrashEmpty() {
+      return !this.$store.state.trash.items.length
+    },
     settings() {
       return {
         startAt: {

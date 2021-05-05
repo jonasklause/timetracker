@@ -5,6 +5,16 @@
         <NuxtLink to="/">Timetracker</NuxtLink>
       </h1>
       <nav class="flex ml-auto">
+        <button
+          v-if="$route.name === 'index' && $store.state.trash.items.length"
+          class="p-4 hover:bg-gray-800"
+          title="Letzten Timer aus Papierkorb wiederherstellen"
+          @click="$store.commit('restore')"
+        >
+          <IconBase width="32" height="32">
+            <IconRestore />
+          </IconBase>
+        </button>
         <NuxtLink
           v-for="(navItem, i) in nav"
           :key="i"
@@ -21,12 +31,18 @@
     </header>
     <div class="p-4">
       <Nuxt />
-    </div>
-    <div class="p-4 text-sm text-gray-500 flex flex-col leading-8">
-      <NuxtLink to="/history">Änderungsverlauf</NuxtLink>
-      <a href="https://paypal.me/jontro" target="_blank">
-        Spendier' mir ein Bier
-      </a>
+      <ul
+        class="mt-4 -mx-4 text-sm border-t border-top border-gray-700 text-gray-500 flex flex-wrap"
+      >
+        <li class="mt-3 px-4">
+          <NuxtLink to="/history">Änderungsverlauf</NuxtLink>
+        </li>
+        <li class="mt-3 px-4">
+          <a href="https://paypal.me/jontro" target="_blank">
+            Spendier' mir ein Bier
+          </a>
+        </li>
+      </ul>
     </div>
   </div>
 </template>

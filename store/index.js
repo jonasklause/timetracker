@@ -18,7 +18,11 @@ export const mutations = {
     state.items = items
   },
   add(state) {
-    const newId = Math.max(0, ...state.items.map((item) => item.id)) + 1
+    const newId =
+      Math.max(
+        0,
+        ...[...state.items, ...state.trash.items].map((item) => item.id)
+      ) + 1
 
     state.items.unshift({
       id: newId,
@@ -29,7 +33,13 @@ export const mutations = {
   },
   remove(state, id) {
     const index = state.items.findIndex((item) => item.id === id)
-    state.items.splice(index, 1)
+    state.trash.items.unshift(state.items.splice(index, 1)[0])
+    state.trash.items.splice(50)
+  },
+  restore(state) {
+    if (state.trash.items.length) {
+      state.items.unshift(state.trash.items.shift())
+    }
   },
   update(state, payload) {
     const index = state.items.findIndex((item) => item.id === payload.id)
