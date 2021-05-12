@@ -14,9 +14,6 @@ export const getters = {
 }
 
 export const mutations = {
-  init(state, { items }) {
-    state.items = items
-  },
   add(state) {
     const newId =
       Math.max(
