@@ -105,7 +105,7 @@ export default {
       })
 
       this.$store.commit('history/addEntry', {
-        type: 'timer/item/updateLabel',
+        type: 'timer/item/transfer',
         text: `transferred ${timeFormat(
           time
         )} from #${sourceId} to #${targetId}`,

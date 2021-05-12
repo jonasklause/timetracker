@@ -67,7 +67,7 @@ export default {
       const newId = this.$store.state.items[0].id
       this.$store.commit('history/addEntry', {
         type: 'timer/add',
-        text: 'added new timer #' + newId,
+        text: 'Neu hinzugefügt: Timer #' + newId,
       })
     },
   },

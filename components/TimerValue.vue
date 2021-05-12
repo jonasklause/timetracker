@@ -76,7 +76,9 @@ export default {
         })
         this.$store.commit('history/addEntry', {
           type: 'timer/item/updateTime',
-          text: `updated time #${this.id} ${oldTime} -> ${timeFormat(newTime)}`,
+          text: `Zeit geändert: Timer #${this.id} ${oldTime} -> ${timeFormat(
+            newTime
+          )}`,
         })
       } else {
         this.$forceUpdate()
