@@ -11,7 +11,6 @@
 
 <script>
 import timeSum from '../lib/timeSum.js'
-import timeFormat from '../lib/timeFormat.js'
 import timeParse from '../lib/timeParse.js'
 
 export default {
@@ -67,18 +66,11 @@ export default {
     },
     updateTime(event) {
       const newTime = timeParse(event.target.value)
-      const oldTime = this.time()
       if (newTime !== false) {
         this.$store.commit('updateTime', {
           id: this.id,
           time: newTime,
           absolute: true,
-        })
-        this.$store.commit('history/addEntry', {
-          type: 'timer/item/updateTime',
-          text: `Zeit geändert: Timer #${this.id} ${oldTime} -> ${timeFormat(
-            newTime
-          )}`,
         })
       } else {
         this.$forceUpdate()

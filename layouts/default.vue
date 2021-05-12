@@ -35,9 +35,6 @@
         class="mt-4 -mx-4 text-sm border-t border-top border-gray-700 text-gray-500 flex flex-wrap"
       >
         <li class="mt-3 px-4">
-          <NuxtLink to="/history">Änderungsverlauf</NuxtLink>
-        </li>
-        <li class="mt-3 px-4">
           <a href="https://paypal.me/jontro" target="_blank">
             Spendier' mir ein Bier
           </a>

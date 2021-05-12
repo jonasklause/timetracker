@@ -64,11 +64,6 @@ export default {
         this.$store.dispatch('pauseAll')
       }
       this.$store.commit('add')
-      const newId = this.$store.state.items[0].id
-      this.$store.commit('history/addEntry', {
-        type: 'timer/add',
-        text: 'Neu hinzugefügt: Timer #' + newId,
-      })
     },
   },
 }

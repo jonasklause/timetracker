@@ -69,28 +69,16 @@ export default {
   methods: {
     resume(event) {
       const settings = this.$store.state.settings
-      this.$store.commit('history/addEntry', {
-        type: 'timer/item/resume',
-        text: `Fortgesetzt: Timer #${this.id} "${this.label}"`,
-      })
       const exclusive = settings.pauseOthersOnResume && !event.metaKey
       this.$store.dispatch('resume', { id: this.id, exclusive })
     },
     pause() {
-      this.$store.commit('history/addEntry', {
-        type: 'timer/item/pause',
-        text: `Pausiert: Timer #${this.id}  "${this.label}"`,
-      })
       this.$store.commit('pause', this.id)
     },
     toggle(event) {
       this.resumedAt ? this.pause(event) : this.resume(event)
     },
     remove() {
-      this.$store.commit('history/addEntry', {
-        type: 'timer/item/removed',
-        text: `Entfernt: Timer #${this.id} "${this.label}"`,
-      })
       this.$store.commit('remove', this.id)
     },
     transfer() {
@@ -99,14 +87,9 @@ export default {
     },
     updateLabel(event) {
       const value = event.target.value
-      const oldLabel = this.label
       this.$store.commit('update', {
         id: this.id,
         label: value,
-      })
-      this.$store.commit('history/addEntry', {
-        type: 'timer/item/updateLabel',
-        text: `Label geändert: Timer #${this.id} "${oldLabel}" -> "${value}"`,
       })
     },
   },

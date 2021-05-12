@@ -60,9 +60,6 @@
 </template>
 
 <script>
-// import timeSum from '../lib/timeSum.js'
-import timeFormat from '../../lib/timeFormat.js'
-
 export default {
   props: {
     maxTime: {
@@ -102,13 +99,6 @@ export default {
       this.$store.commit('updateTime', {
         id: targetId,
         time: +time,
-      })
-
-      this.$store.commit('history/addEntry', {
-        type: 'timer/item/transfer',
-        text: `transferred ${timeFormat(
-          time
-        )} from #${sourceId} to #${targetId}`,
       })
       this.$router.push('/')
     },
