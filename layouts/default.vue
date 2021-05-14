@@ -5,16 +5,6 @@
         <NuxtLink to="/">Timetracker</NuxtLink>
       </h1>
       <nav class="flex ml-auto">
-        <button
-          v-if="$route.name === 'index' && $store.state.trash.items.length"
-          class="p-4 hover:bg-gray-800"
-          title="Letzten Timer aus Papierkorb wiederherstellen"
-          @click="$store.commit('restore')"
-        >
-          <IconBase width="32" height="32">
-            <IconRestore />
-          </IconBase>
-        </button>
         <NuxtLink
           v-for="(navItem, i) in nav"
           :key="i"

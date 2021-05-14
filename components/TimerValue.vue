@@ -1,7 +1,7 @@
 <template>
   <input
-    class="p-2 text-4xl text-center bg-transparent block w-full font-mono"
-    :value="time() | timeFormat"
+    class="text-4xl text-center bg-transparent block w-full font-mono"
+    :value="time | timeFormat"
     @focus="focus = true"
     @blur="focus = false"
     @click="$event.target.select()"
@@ -17,6 +17,10 @@ export default {
   updateInterval: null,
   props: {
     id: {
+      type: Number,
+      default: 0,
+    },
+    type: {
       type: Number,
       default: 0,
     },
@@ -36,11 +40,17 @@ export default {
   data() {
     return {
       focus: false,
+      time: timeSum(this.pausedWith, this.resumedAt, this.label),
     }
   },
   watch: {
     resumedAt(running) {
       this.toggleInterval(running)
+    },
+    time(newTime, oldTime) {
+      if (Math.sign(newTime) !== Math.sign(oldTime)) {
+        this.$emit('forceUpdate')
+      }
     },
   },
   mounted() {
@@ -50,23 +60,23 @@ export default {
     this.toggleInterval(false)
   },
   methods: {
-    time() {
-      return timeSum(this.pausedWith, this.resumedAt, this.label)
-    },
     toggleInterval(active) {
       if (!active && this.$options.updateInterval) {
         clearInterval(this.$options.updateInterval)
       } else if (active) {
         this.$options.updateInterval = setInterval(() => {
           if (!this.focus) {
+            this.time = timeSum(this.pausedWith, this.resumedAt, this.label)
             this.$forceUpdate()
           }
         }, 1000)
       }
     },
     updateTime(event) {
-      const newTime = timeParse(event.target.value)
+      let newTime = timeParse(event.target.value)
+      if (this.type === 1) newTime *= -1
       if (newTime !== false) {
+        this.time = newTime
         this.$store.commit('updateTime', {
           id: this.id,
           time: newTime,

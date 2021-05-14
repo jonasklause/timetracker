@@ -1,52 +1,66 @@
 <template>
-  <div
-    class="bg-gray-700 text-center grid grid-cols-2"
-    :class="[resumedAt ? 'bg-green-900' : 'bg-gray-700']"
-  >
-    <div class="id text-left text-gray-500 text-xs p-2">#{{ id }}</div>
-    <ul class="text-right flex justify-end">
-      <li v-if="$store.state.settings.showTransferButtons">
-        <button class="p-2" title="Zeit verschieben" @click="transfer">
-          <IconBase width="20" height="20">
-            <IconTransfer />
-          </IconBase>
-        </button>
-      </li>
-      <li>
-        <button class="p-2" title="Löschen" @click="remove">
-          <IconBase width="20" height="20">
-            <IconDelete />
-          </IconBase>
-        </button>
-      </li>
-    </ul>
-    <div class="col-span-2">
+  <div class="bg-gray-700 text-center" :class="bgClass()">
+    <div class="flex">
+      <ul>
+        <li>
+          <button
+            class="p-2"
+            :title="resumedAt ? 'Pause' : 'Fortsetzen'"
+            @click="toggle"
+          >
+            <IconBase width="20" height="20">
+              <Component :is="resumedAt ? 'IconPause' : 'IconPlay'" />
+            </IconBase>
+          </button>
+        </li>
+      </ul>
+      <div class="text-center mx-auto text-gray-400 text-xs p-2">
+        #{{ id }} {{ typeName }}
+      </div>
+      <ul class="text-right flex justify-end">
+        <li v-if="$store.state.settings.showTransferButtons">
+          <button class="p-2" title="Zeit verschieben" @click="transfer">
+            <IconBase width="20" height="20">
+              <IconTransfer />
+            </IconBase>
+          </button>
+        </li>
+        <li>
+          <button class="p-2" title="Löschen" @click="remove">
+            <IconBase width="20" height="20">
+              <IconDelete />
+            </IconBase>
+          </button>
+        </li>
+      </ul>
+    </div>
+    <div>
+      <TimerValue
+        v-bind="{ id, label, resumedAt, pausedWith, type }"
+        @forceUpdate="$forceUpdate()"
+      />
+    </div>
+    <div class="">
       <input
         ref="label"
         :value="label"
-        class="p-1 text-center bg-transparent block w-full"
+        class="p-1 text-lg text-center bg-transparent block w-full"
         @change="updateLabel"
       />
-    </div>
-    <div class="col-span-2 text-left">
-      <button
-        class="absolute p-4"
-        :title="resumedAt ? 'Pause' : 'Fortsetzen'"
-        @click="toggle"
-      >
-        <IconBase width="24" height="24">
-          <Component :is="resumedAt ? 'IconPause' : 'IconPlay'" />
-        </IconBase>
-      </button>
-      <TimerValue v-bind="{ id, label, resumedAt, pausedWith }" />
     </div>
   </div>
 </template>
 
 <script>
+import timeSum from '~/lib/timeSum'
+
 export default {
   props: {
     id: {
+      type: Number,
+      default: 0,
+    },
+    type: {
       type: Number,
       default: 0,
     },
@@ -61,6 +75,13 @@ export default {
     pausedWith: {
       type: Number,
       default: 0,
+    },
+  },
+  computed: {
+    typeName() {
+      if (this.type === 0) return 'Stoppuhr'
+      if (this.type === 1) return 'Countdown'
+      return undefined
     },
   },
   mounted() {
@@ -91,6 +112,12 @@ export default {
         id: this.id,
         label: value,
       })
+    },
+    bgClass() {
+      const time = timeSum(this.pausedWith, this.resumedAt, this.label)
+      if (this.type === 1 && time > 0) return 'bg-red-900 animate-pulse'
+      if (this.resumedAt) return 'bg-green-900'
+      return 'bg-gray-700'
     },
   },
 }

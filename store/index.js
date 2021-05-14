@@ -14,19 +14,22 @@ export const getters = {
 }
 
 export const mutations = {
-  add(state) {
-    const newId =
+  add(state, type) {
+    const id =
       Math.max(
         0,
         ...[...state.items, ...state.trash.items].map((item) => item.id)
       ) + 1
+    const label = ''
+    let pausedWith = parseInt(state.settings.startAt || 0)
+    let resumedAt = Date.now()
 
-    state.items.unshift({
-      id: newId,
-      label: '',
-      resumedAt: Date.now(),
-      pausedWith: parseInt(state.settings.startAt || 0),
-    })
+    if (type === 1) {
+      pausedWith = 0
+      resumedAt = 0
+    }
+
+    state.items.unshift({ id, type, label, resumedAt, pausedWith })
   },
   remove(state, id) {
     const index = state.items.findIndex((item) => item.id === id)
