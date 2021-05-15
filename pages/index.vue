@@ -2,24 +2,26 @@
   <div>
     <div class="grid gap-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2">
       <div class="flex text-center">
-        <button class="mr-4 w-full pb-4" @click="addTimer($event, 0)">
-          <span class="text-7xl">+</span>
-          <br />
-          <span class="text-sm">Stoppuhr</span>
+        <button class="w-full p-2" @click="addTimer($event, 0)">
+          <IconBase width="48" height="48" class="mx-auto">
+            <IconStoppwatch />
+          </IconBase>
+          <span class="text-sm">+&nbsp;Stoppuhr</span>
         </button>
-        <button class="bg-gray-800 w-full pb-4" @click="addTimer($event, 1)">
-          <span class="text-7xl">+</span>
-          <br />
-          <span class="text-sm">Countdown</span>
+        <button class="w-full p-2" @click="addTimer($event, 1)">
+          <IconBase width="48" height="48" class="mx-auto">
+            <IconCountdown />
+          </IconBase>
+          <span class="text-sm">+&nbsp;Countdown</span>
         </button>
         <button
           v-if="$store.state.trash.items.length"
-          class="p-4 bg-gray-800 ml-4 relative"
+          class="p-4 relative"
           title="Letzten Timer aus Papierkorb wiederherstellen"
           @click="$store.commit('restore')"
         >
           <span
-            class="absolute text-sm left-11 font-bold rounded-full bg-gray-100 text-gray-700 w-auto block px-1 border-2 border-gray-700"
+            class="absolute text-sm left-10 font-bold rounded-full bg-gray-100 text-gray-700 block px-2 border-2 border-gray-700"
           >
             {{ $store.state.trash.items.length }}
           </span>
@@ -30,7 +32,9 @@
       </div>
       <Timer v-for="item in items" :key="item.id" v-bind="item" />
     </div>
-    <div class="mt-4">Summe aller Stoppuhren: {{ sum() }}</div>
+    <div class="mt-4" v-if="$store.state.settings.showSum">
+      Stoppuhren: {{ sum() }}
+    </div>
     <NuxtChild />
   </div>
 </template>

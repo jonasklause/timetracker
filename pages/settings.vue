@@ -66,9 +66,15 @@ export default {
         },
         showTransferButtons: {
           type: 'Checkbox',
-          label: 'Zeiten verschieben',
+          label: 'Zeiten umbuchen',
           description:
-            'Erfasste Zeiten können ganz oder teilweise in andere Timer verschoben werden.',
+            'Erfasste Zeiten können ganz oder teilweise in andere Timer umgebucht werden.',
+        },
+        showSum: {
+          type: 'Checkbox',
+          label: 'Summe aller Stoppuhren anzeigen',
+          description:
+            'Unterhalb der Timer wird die Summe aller Stoppuhren angezeigt. Countdown-Timer werden nicht berücksichtigt.',
         },
       }
     },

@@ -19,7 +19,7 @@
       </div>
       <ul class="text-right flex justify-end">
         <li v-if="$store.state.settings.showTransferButtons">
-          <button class="p-2" title="Zeit verschieben" @click="transfer">
+          <button class="p-2" title="Zeit umbuchen" @click="transfer">
             <IconBase width="20" height="20">
               <IconTransfer />
             </IconBase>
