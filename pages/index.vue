@@ -23,6 +23,9 @@
           <IconBase width="48" height="48">
             <IconRestore />
           </IconBase>
+          <span class="text-xs absolute inset-x-0 -mt-6 text-gray-800">{{
+            $store.state.trash.items.length
+          }}</span>
         </button>
       </div>
       <Timer v-for="item in items" :key="item.id" v-bind="item" />

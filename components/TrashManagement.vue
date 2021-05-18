@@ -1,14 +1,28 @@
 <template>
   <div>
-    <h2 class="text-3xl mb-4">Papierkorb ({{ items.length || 'leer' }})</h2>
+    <h2 class="mb-6">
+      <button
+        class="bg-gray-600 rounded inline-block p-2 float-right"
+        @click="$store.commit('trash/clear')"
+      >
+        {{
+          $store.state.trash.items.length
+            ? `Papierkorb leeren (${$store.state.trash.items.length} Timer)`
+            : '✓ Papierkorb leer'
+        }}
+      </button>
+      <button class="focus:outline-none text-3xl" @click="open = !open">
+        {{ open ? '▾' : '▸' }} Papierkorb
+      </button>
+    </h2>
 
     <p class="text-gray-400 text-sm mb-6">
       Über den Papierkorb können die zuletzt gelöschten Timer wieder hergestellt
-      werden. Verfügbar sind immer die letzten 25 Timer. Wenn ein Timer zum
+      werden. Verfügbar sind immer die letzten 50 Timer. Wenn ein Timer zum
       Zeitpunkt des Lösches noch gelaufen ist, läuft er auch im Papierkorb
       weiter.
     </p>
-    <div v-if="items.length">
+    <div v-if="items.length && open">
       <button
         v-if="items.length > 1"
         class="inline-block px-2 py-1 mb-2 rounded-full text-sm text-gray-200 bg-gray-500"
@@ -64,7 +78,7 @@
         >
           <div class="relative text-sm">
             <div
-              class="absolute left-4 font-bold rounded-full bg-gray-100 text-gray-700 px-2 border-2 border-gray-700"
+              class="absolute left-4 font-bold rounded-full bg-gray-100 text-gray-700 px-1 border-2 border-gray-700"
             >
               {{ selected.length }}
             </div>
@@ -78,9 +92,9 @@
           class="bg-red-800 rounded p-2 mr-1 inline-flex items-center"
           @click="removeSelected"
         >
-          <div class="relative text-sm py-1 pr-3">
+          <div class="relative text-sm py-1 pr-4">
             <div
-              class="absolute left-6 top-0 font-bold rounded-full bg-gray-100 text-red-800 px-2 border-2 border-red-800"
+              class="absolute left-6 top-0 font-bold rounded-full bg-gray-100 text-red-800 px-1 border-2 border-red-800"
             >
               {{ selected.length }}
             </div>
@@ -101,6 +115,7 @@ export default {
   data() {
     return {
       selected: [],
+      open: false,
     }
   },
   computed: {
