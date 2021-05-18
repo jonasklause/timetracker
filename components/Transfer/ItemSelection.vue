@@ -24,7 +24,8 @@ export default {
   computed: {
     items() {
       return this.$store.state.items.filter(
-        (item) => item.id !== this.$store.state.transfer.sourceId
+        (item) =>
+          item.type === 0 && item.id !== this.$store.state.transfer.sourceId
       )
     },
     target: {

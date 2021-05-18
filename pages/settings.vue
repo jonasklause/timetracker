@@ -55,7 +55,7 @@ export default {
           type: 'Checkbox',
           label: 'Zeiten umbuchen',
           description:
-            'Erfasste Zeiten können ganz oder teilweise in andere Timer umgebucht werden.',
+            'Erfasste Zeiten können ganz oder teilweise in andere Stoppuhren umgebucht werden.',
         },
         showSum: {
           type: 'Checkbox',
