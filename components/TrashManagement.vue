@@ -7,8 +7,8 @@
       >
         {{
           $store.state.trash.items.length
-            ? `Papierkorb leeren (${$store.state.trash.items.length} Timer)`
-            : '✓ Papierkorb leer'
+            ? `leeren (${$store.state.trash.items.length} Timer)`
+            : '✓ leer'
         }}
       </button>
       <button class="focus:outline-none text-3xl" @click="open = !open">
