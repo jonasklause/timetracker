@@ -2,17 +2,18 @@
   <div>
     <h2 class="mb-6">
       <button
-        class="bg-gray-600 rounded inline-block p-2 float-right"
+        class="rounded inline-block py-1 px-2 float-right text-sm"
+        :class="items.length ? 'bg-red-800' : 'bg-gray-600'"
         @click="$store.commit('trash/clear')"
       >
         {{
-          $store.state.trash.items.length
+          items.length
             ? `leeren (${$store.state.trash.items.length} Timer)`
             : '✓ leer'
         }}
       </button>
       <button class="focus:outline-none text-3xl" @click="open = !open">
-        {{ open ? '▾' : '▸' }} Papierkorb
+        {{ !items.length ? '' : open ? '▾' : '▸' }} Papierkorb
       </button>
     </h2>
 
