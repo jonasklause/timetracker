@@ -36,9 +36,12 @@ export const mutations = {
     state.trash.items.unshift(state.items.splice(index, 1)[0])
     state.trash.items.splice(50)
   },
-  restore(state) {
+  restore(state, id = false) {
+    const trashIndex = id
+      ? state.trash.items.findIndex((item) => item.id === id)
+      : 0
     if (state.trash.items.length) {
-      state.items.unshift(state.trash.items.shift())
+      state.items.unshift(state.trash.items.splice(trashIndex, 1)[0])
     }
   },
   update(state, payload) {

@@ -20,11 +20,6 @@
           title="Letzten Timer aus Papierkorb wiederherstellen"
           @click="$store.commit('restore')"
         >
-          <span
-            class="absolute text-sm left-10 font-bold rounded-full bg-gray-100 text-gray-700 block px-2 border-2 border-gray-700"
-          >
-            {{ $store.state.trash.items.length }}
-          </span>
           <IconBase width="48" height="48">
             <IconRestore />
           </IconBase>
@@ -32,7 +27,7 @@
       </div>
       <Timer v-for="item in items" :key="item.id" v-bind="item" />
     </div>
-    <div class="mt-4" v-if="$store.state.settings.showSum">
+    <div v-if="$store.state.settings.showSum" class="mt-4">
       Stoppuhren: {{ sum() }}
     </div>
     <NuxtChild />
