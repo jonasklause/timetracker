@@ -7,13 +7,17 @@
       class="block rounded text-white m-1 p-2 text-sm"
       @click="target = item.id"
     >
-      <span>#{{ item.id }}</span>
-      <span>{{ item.label }}</span>
+      <span>
+        {{ item.time | timeFormat }} {{ item.label ? '-' : '' }}
+        {{ item.label }}
+      </span>
     </button>
   </div>
 </template>
 
 <script>
+import timeSum from '~/lib/timeSum'
+
 export default {
   props: {
     maxTime: {
@@ -23,10 +27,16 @@ export default {
   },
   computed: {
     items() {
-      return this.$store.state.items.filter(
-        (item) =>
-          item.type === 0 && item.id !== this.$store.state.transfer.sourceId
-      )
+      return this.$store.state.items
+        .filter(
+          (item) =>
+            item.type === 0 && item.id !== this.$store.state.transfer.sourceId
+        )
+        .map((item) => ({
+          id: item.id,
+          label: item.label,
+          time: timeSum(item.pausedWith, item.resumedAt, item.label),
+        }))
     },
     target: {
       get() {

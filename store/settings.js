@@ -1,7 +1,7 @@
 import Vue from 'vue'
 
 export const state = () => ({
-  pauseOthersOnResume: true,
+  pauseOthersOnResume: false,
 })
 
 export const mutations = {

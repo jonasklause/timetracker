@@ -24,10 +24,10 @@
         </div>
         <hr class="border-gray-600 my-3 border-1" />
         <h2 class="text-xl mb-4">
-          Zeit verschieben
+          Zeit umbuchen
           <span class="text-gray-400 text-sm">
             <br />
-            Wieviel soll verschoben werden?
+            Wieviel Zeit soll umgebucht werden?
           </span>
         </h2>
         <TransferTimeSelection />
@@ -38,7 +38,7 @@
           Ziel auswählen
           <span class="text-gray-400 text-sm">
             <br />
-            Wohin soll verschoben werden?
+            Wohin soll umgebucht werden?
           </span>
         </h2>
         <TransferItemSelection />
