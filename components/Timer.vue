@@ -14,8 +14,13 @@
           </button>
         </li>
       </ul>
-      <div class="text-center mx-auto text-gray-400 text-xs p-2">
-        #{{ id }} {{ typeName }}
+      <div
+        class="text-center flex align-center mx-auto text-gray-400 text-xs p-2"
+      >
+        <IconBase width="16" height="16" class="mr-2">
+          <Component :is="icon" />
+        </IconBase>
+        {{ headline() }}
       </div>
       <ul class="text-right flex justify-end">
         <li v-if="$store.state.settings.showTransferButtons && type === 0">
@@ -52,7 +57,9 @@
 </template>
 
 <script>
+import timeFormat from '~/lib/timeFormat'
 import timeSum from '~/lib/timeSum'
+import dateFormat from '~/lib/dateFormat'
 
 export default {
   props: {
@@ -76,12 +83,14 @@ export default {
       type: Number,
       default: 0,
     },
+    initValue: {
+      type: Number,
+      default: 0,
+    },
   },
   computed: {
-    typeName() {
-      if (this.type === 0) return 'Stoppuhr'
-      if (this.type === 1) return 'Countdown'
-      return undefined
+    icon() {
+      return ['IconStoppwatch', 'IconCountdown'][parseInt(this.type)]
     },
   },
   mounted() {
@@ -118,6 +127,18 @@ export default {
       if (this.type === 1 && time > 0) return 'bg-red-900 animate-pulse'
       if (this.resumedAt) return 'bg-green-900'
       return 'bg-gray-700'
+    },
+    headline() {
+      let headline = ''
+      if (this.type === 0) {
+        headline = this.initValue ? dateFormat(this.initValue) : 'Stoppuhr'
+      }
+      if (this.type === 1) {
+        headline = this.initValue ? timeFormat(this.initValue, 3) : 'Countdown'
+        const time = timeSum(this.pausedWith, this.resumedAt, this.label)
+        if (time > 0) headline += ', abgelaufen'
+      }
+      return headline
     },
   },
 }

@@ -74,8 +74,14 @@ export default {
     },
     updateTime(event) {
       let newTime = timeParse(event.target.value)
-      if (this.type === 1) newTime *= -1
       if (newTime !== false) {
+        if (this.type === 1) {
+          this.$store.commit('update', {
+            id: this.id,
+            initValue: newTime,
+          })
+          newTime *= -1
+        }
         this.time = newTime
         this.$store.commit('updateTime', {
           id: this.id,

@@ -23,13 +23,16 @@ export const mutations = {
     const label = ''
     let pausedWith = parseInt(state.settings.startAt || 0)
     let resumedAt = Date.now()
-
+    let initValue = 0
+    if (type === 0) {
+      initValue = Date.now()
+    }
     if (type === 1) {
       pausedWith = 0
       resumedAt = 0
     }
 
-    state.items.unshift({ id, type, label, resumedAt, pausedWith })
+    state.items.unshift({ id, type, label, resumedAt, pausedWith, initValue })
   },
   remove(state, id) {
     const index = state.items.findIndex((item) => item.id === id)
