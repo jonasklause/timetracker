@@ -4,14 +4,19 @@
       v-if="type === 'Text'"
       v-model.lazy="value"
       type="text"
-      class="block w-full bg-transparent border-gray-200 border rounded-md p-1 text-center"
+      class="block w-16 bg-transparent border-gray-200 border rounded-md p-1 text-center"
     />
-    <input
+    <label
       v-if="type === 'Checkbox'"
-      v-model="value"
-      type="checkbox"
-      class="w-4 h-4 text-right"
-    />
+      class="w-8 block border-gray-200 border rounded-xl p-1 box-content"
+      :class="value ? 'bg-green-700' : ''"
+    >
+      <input
+        v-model="value"
+        type="checkbox"
+        class="w-4 h-4 block appearance-none rounded-lg bg-gray-500 checked:bg-gray-200 checked:ml-4 transition-all"
+      />
+    </label>
   </div>
 </template>
 

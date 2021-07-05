@@ -13,11 +13,7 @@
         </div>
       </div>
 
-      <Control
-        v-bind="field"
-        :setting-key="key"
-        class="ml-6 w-16 text-right flex-shrink-0"
-      />
+      <Control v-bind="field" :setting-key="key" class="ml-6 flex-shrink-0" />
     </label>
     <hr class="border-gray-600 mb-4" />
     <TrashManagement />
